@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Brand Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Brand List</h1>
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Brand Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through brands and populate table rows -->
+        <tr th:each="brand : ${brands}">
+            <td th:text="${brand.id}"></td>
+            <td th:text="${brand.brandName}"></td>
+            <td>
+                <!-- Button to edit brand -->
+                <a th:href="@{'/brands/edit/' + ${brand.id}}" class="btn btn-sm btn-primary mr-2">Edit</a>
+                <!-- Button to delete brand -->
+                <a th:href="@{'/brands/delete/' + ${brand.id}}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Button to add new brand -->
+    <a th:href="@{/brands/add}" class="btn btn-primary">Add Brand</a>
+</div>
+</body>
+</html>
