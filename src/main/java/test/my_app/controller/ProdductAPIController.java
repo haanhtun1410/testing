@@ -1,17 +1,16 @@
 package test.my_app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import test.my_app.domain.Brand;
-import test.my_app.domain.Product;
-import test.my_app.domain.SubCategory;
+import test.my_app.domain.*;
+import test.my_app.repos.RegisterRepository;
 import test.my_app.services.BrandService;
 import test.my_app.services.ProductService;
+import test.my_app.services.StatusService;
 import test.my_app.services.SubCategoryService;
 
 import java.util.List;
@@ -27,8 +26,15 @@ public class ProdductAPIController {
     @Autowired
     BrandService brandService;
 
+
+    @Autowired
+    RegisterRepository registerRepository;
+
     @Autowired
     SubCategoryService subCategoryService;
+
+    @Autowired
+    private StatusService statusService;
 
     // ... Existing code ...
     @GetMapping
@@ -41,6 +47,14 @@ public class ProdductAPIController {
         List<Brand> brands = brandService.getAllBrands();
         return ResponseEntity.ok(brands);
     }
+
+    @GetMapping("/statuses")
+    public ResponseEntity<List<Status>> getAllStatuses() {
+        return ResponseEntity.ok(statusService.getAllStatuses());
+    }
+
+
+
 
     @GetMapping("/subcategories")
     public ResponseEntity<List<SubCategory>> getAllSubs() {
@@ -64,6 +78,18 @@ public class ProdductAPIController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/login/{email}/{pw}")
+    public ResponseEntity<Register> getLogin(@PathVariable("email") String email , @PathVariable("pw") String pw) {
+        Register register = registerRepository.findByPasswordAndEmail(pw,email);
+        System.out.println(register);
+        if (register != null) {
+            return ResponseEntity.ok(register);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {

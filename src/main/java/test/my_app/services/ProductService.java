@@ -31,7 +31,7 @@ public class ProductService {
     }
 
     // Update a product
-    public Product updateProduct(Product product) {
+    public Product  updateProduct(Product product) {
         return productRepository.save(product);
     }
 
