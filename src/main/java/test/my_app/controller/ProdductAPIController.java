@@ -53,9 +53,6 @@ public class ProdductAPIController {
         return ResponseEntity.ok(statusService.getAllStatuses());
     }
 
-
-
-
     @GetMapping("/subcategories")
     public ResponseEntity<List<SubCategory>> getAllSubs() {
         List<SubCategory> subCategories = subCategoryService.getAllSubCategories();
@@ -74,17 +71,6 @@ public class ProdductAPIController {
         Product product = productService.getProductById(id);
         if (product != null) {
             return ResponseEntity.ok(product);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/login/{email}/{pw}")
-    public ResponseEntity<Register> getLogin(@PathVariable("email") String email , @PathVariable("pw") String pw) {
-        Register register = registerRepository.findByPasswordAndEmail(pw,email);
-        System.out.println(register);
-        if (register != null) {
-            return ResponseEntity.ok(register);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -109,6 +95,16 @@ public class ProdductAPIController {
         if (existingProduct != null) {
             productService.deleteProduct(id);
             return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/login/{email}/{pw}")
+    public ResponseEntity<Register> getLogin(@PathVariable("email") String email , @PathVariable("pw") String pw) {
+        Register register = registerRepository.findByPasswordAndEmail(pw,email);
+        System.out.println(register);
+        if (register != null) {
+            return ResponseEntity.ok(register);
         } else {
             return ResponseEntity.notFound().build();
         }
