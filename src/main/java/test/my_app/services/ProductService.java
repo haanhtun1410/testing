@@ -13,7 +13,7 @@ import test.my_app.repos.ProductRepository;
 import java.util.List;
 
 @Service
-public class ProductService implements MyServiceInterface<Product>{
+public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -40,39 +40,9 @@ public class ProductService implements MyServiceInterface<Product>{
         productRepository.deleteById(id);
     }
 
-    public List<Product> getAllProducts() {
-        List<Product> products = productRepository.getAll();
-        for (Product product : products) {
-            Hibernate.initialize(product.getStatus());
-            Hibernate.initialize(product.getBrands());
-        }
-        return products;
-    }
-
-
     public List<Product> findAllProducts() {
         List<Product> products = productRepository.findAll();
         return products;
     }
 
-    @Override
-    public List<Product> findAll() {
-        List<Product> products = productRepository.findAll();
-        return products;
-    }
-
-    @Override
-    public Product findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void save(Product entity) {
-
-    }
-
-    @Override
-    public void delete(Product entity) {
-
-    }
 }

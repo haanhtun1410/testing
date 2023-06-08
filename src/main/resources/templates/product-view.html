@@ -17,9 +17,6 @@
 
 <div class="container mt-5">
     <h1>Product Data</h1>
-
-
-
     <a id="createProductModalLink" th:href="@{/products/create-view}"
         class="btn btn-primary createProductModal" >
        </i> Create Product
@@ -73,7 +70,6 @@
 <!-- Include Bootstrap JS -->
 
 <script type="text/javascript">
-
         $("#createProductModalLink").on("click", function(e) {
             e.preventDefault();
             var modal = $("#ProductModal");

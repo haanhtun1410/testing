@@ -37,7 +37,6 @@ public class SubCategory {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-
     @OneToMany(mappedBy = "subcate",fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Product> subcateProducts;

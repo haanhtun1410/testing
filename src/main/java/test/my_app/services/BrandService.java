@@ -8,7 +8,7 @@ import test.my_app.repos.BrandRepository;
 import java.util.List;
 
 @Service
-public class BrandService implements MyServiceInterface<Brand> {
+public class BrandService{
 
     @Autowired
     private BrandRepository brandRepository;
@@ -20,7 +20,7 @@ public class BrandService implements MyServiceInterface<Brand> {
 
     // Read a brand by id
     public Brand getBrandById(Long id) {
-        return brandRepository.findById(id).get();
+        return brandRepository.findById(id).orElse(null);
     }
 
     // Update a brand
@@ -38,23 +38,4 @@ public class BrandService implements MyServiceInterface<Brand> {
         return brandRepository.findAll();
     }
 
-    @Override
-    public List<Brand> findAll() {
-        return brandRepository.findAll();
-    }
-
-    @Override
-    public Brand findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void save(Brand entity) {
-
-    }
-
-    @Override
-    public void delete(Brand entity) {
-
-    }
 }

@@ -32,21 +32,16 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     HttpSession ss;
     @Autowired
     private SubCategoryRepository subcategoryRepository; // Replace with your subcategory repository class
-
     @Autowired
     private BrandService brandRepository; //
     @Autowired
     private BrandRepository brandRes; //
-
     @Autowired
     private StatusService statusRepository; //
-
-
     @Transactional
     @GetMapping("")
     public String showProductList(Model model) {
@@ -60,14 +55,11 @@ public class ProductController {
 
         return "product-view";
     }
-
-
     @GetMapping("/get-list")
     @ResponseBody
     public List<Product> getAllProducts() {
-        return productRepository.getAll();
+        return productRepository.findAll();
     }
-
 
 
     @GetMapping("/create-view")

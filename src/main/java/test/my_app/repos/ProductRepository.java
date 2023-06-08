@@ -14,8 +14,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Transactional
-    @Query(value = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.status LEFT JOIN FETCH p.subcate LEFT JOIN FETCH p.brands")
-    List<Product> getAll();
 
 }

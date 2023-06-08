@@ -1,6 +1,6 @@
 package test.my_app.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
 
@@ -35,8 +35,16 @@ public class Brand {
     private String brandName;
 
 
-    @ManyToMany(mappedBy = "brands", fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JoinTable(
+            name = "product_brand",
+            joinColumns = @JoinColumn(name = "product_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "brand_id",referencedColumnName = "id"),
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"product_id", "brand_id"})
+            }
+    )
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("brands")
     private Set<Product> products=new HashSet<>();
 
     @Override

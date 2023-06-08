@@ -1,9 +1,6 @@
 package test.my_app.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -28,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product implements Serializable {
 
     @Id
@@ -63,8 +61,6 @@ public class Product implements Serializable {
     private SubCategory subcate;
 
 
-    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_brand",
             joinColumns = @JoinColumn(name = "product_id",referencedColumnName = "id"),
@@ -73,22 +69,12 @@ public class Product implements Serializable {
                     @UniqueConstraint(columnNames = {"product_id", "brand_id"})
             }
     )
-    private Set<Brand> brands = new HashSet<Brand>();
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("products")
+    private Set<Brand> brands ;
 
     public void setBrand(Brand brand) {
         brands.add(brand);
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", color='" + color  +'\'' +
-                ", quantity=" + quantity +'\'' +
-                ", sellPrice=" + sellPrice +'\'' +
-                ", originPrice=" + originPrice +'\'' +
-                ", description='" + description ;
     }
 
     public String display() {
