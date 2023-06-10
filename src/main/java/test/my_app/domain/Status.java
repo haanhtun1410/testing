@@ -31,10 +31,6 @@ public class Status implements Serializable {
     @Column(length = 100)
     private String statusName;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "status" ,fetch = FetchType.LAZY)
-    private Set<Product> statusProducts = new HashSet<>();
-
     @Override
     public String toString() {
         return statusName;

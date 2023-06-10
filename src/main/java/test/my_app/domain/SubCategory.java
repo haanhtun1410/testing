@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Table;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,10 +15,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@ToString
 
 public class SubCategory {
 
@@ -37,7 +40,8 @@ public class SubCategory {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "subcate",fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "subcate")
     @JsonIgnore
     private Set<Product> subcateProducts;
 

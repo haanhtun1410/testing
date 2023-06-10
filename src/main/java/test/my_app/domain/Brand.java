@@ -2,6 +2,7 @@ package test.my_app.domain;
 
 import com.fasterxml.jackson.annotation.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import jakarta.persistence.*;
 
 
@@ -43,9 +44,10 @@ public class Brand {
                     @UniqueConstraint(columnNames = {"product_id", "brand_id"})
             }
     )
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("brands")
-    private Set<Product> products=new HashSet<>();
+    @JsonIdentityReference(alwaysAsId = true)
+    private Set<Product> products = new HashSet<>();
 
     @Override
     public String toString() {

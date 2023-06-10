@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import test.my_app.domain.*;
+import test.my_app.repos.ProductRepository;
 import test.my_app.repos.RegisterRepository;
 import test.my_app.services.BrandService;
 import test.my_app.services.ProductService;
@@ -21,11 +22,13 @@ import java.util.List;
 public class ProdductAPIController {
 
     @Autowired
-    private ProductService productService;
+    ProductService productService;
 
     @Autowired
     BrandService brandService;
 
+    @Autowired
+    ProductRepository productRepository;
 
     @Autowired
     RegisterRepository registerRepository;
@@ -34,12 +37,23 @@ public class ProdductAPIController {
     SubCategoryService subCategoryService;
 
     @Autowired
-    private StatusService statusService;
+     StatusService statusService;
 
     // ... Existing code ...
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.findAllProducts();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/subcategories/{id}")
+    public ResponseEntity<List<Product>> getAllProductsByCate(@PathVariable Long id) {
+        List<Product> products = productService.findByProductCate(id);
+        return ResponseEntity.ok(products);
+    }
+    @GetMapping("/brands/{id}")
+    public ResponseEntity<List<Product>> getAllProductsByBrandId(@PathVariable Long id) {
+        List<Product> products = productRepository.findByBrandId(id);
         return ResponseEntity.ok(products);
     }
     @GetMapping("/brands")
@@ -58,6 +72,8 @@ public class ProdductAPIController {
         List<SubCategory> subCategories = subCategoryService.getAllSubCategories();
         return ResponseEntity.ok(subCategories);
     }
+
+
 
     @PostMapping( produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {

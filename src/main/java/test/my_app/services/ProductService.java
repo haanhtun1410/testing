@@ -1,12 +1,7 @@
 package test.my_app.services;
 
-import jakarta.persistence.EntityManagerFactory;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import test.my_app.domain.Brand;
 import test.my_app.domain.Product;
 import test.my_app.repos.ProductRepository;
 
@@ -44,5 +39,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         return products;
     }
-
+    public List<Product> findByProductCate(Long id){
+        return productRepository.findAllBySubcateId(id);
+    }
 }
