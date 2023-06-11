@@ -4,25 +4,11 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.engine.FetchStyle;
-import org.hibernate.sql.results.graph.FetchStyleAccess;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.transaction.annotation.Transactional;
-
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -60,7 +46,8 @@ public class Product implements Serializable {
     @JoinColumn(name = "subcate_id", nullable = false)
     private SubCategory subcate;
 
-
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("products")
     @JoinTable(
             name = "product_brand",
             joinColumns = @JoinColumn(name = "product_id",referencedColumnName = "id"),
@@ -69,25 +56,9 @@ public class Product implements Serializable {
                     @UniqueConstraint(columnNames = {"product_id", "brand_id"})
             }
     )
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties("products")
     private Set<Brand> brands ;
-
     public void setBrand(Brand brand) {
         brands.add(brand);
     }
 
-    public String display() {
-        return "Product{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", color='" + color  +'\'' +
-                ", quantity=" + quantity +'\'' +
-                ", sellPrice=" + sellPrice +'\'' +
-                ", Brands=" + getBrands() +'\'' +
-                ", subcate=" + subcate.getSubCateName() +'\'' +
-                ", status=" + status +'\'' +
-                ", description='" + description
-                ;
-    }
 }

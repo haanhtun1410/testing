@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import jakarta.persistence.*;
 
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,18 +15,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "brand")
-public class Brand {
+
+public class Brand implements Serializable {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -35,23 +32,11 @@ public class Brand {
     @Column(length = 100)
     private String brandName;
 
-
-    @JoinTable(
-            name = "product_brand",
-            joinColumns = @JoinColumn(name = "product_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "brand_id",referencedColumnName = "id"),
-            uniqueConstraints = {
-                    @UniqueConstraint(columnNames = {"product_id", "brand_id"})
-            }
-    )
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE,mappedBy = "brands")
     @JsonIgnoreProperties("brands")
     @JsonIdentityReference(alwaysAsId = true)
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products;
 
-    @Override
-    public String toString() {
-        return brandName;
-    }
+
 
 }

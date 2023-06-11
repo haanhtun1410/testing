@@ -79,7 +79,6 @@ public class ProductController {
                                    @RequestParam("selectedBrands") List<Long> selectedBrandIds) {
         System.out.println("run");
         Set<Brand> selectedBrands = selectedBrandIds.stream().map(id -> brandRes.findById(id).orElse(null)).collect(Collectors.toSet());
-        System.out.println(product.display());
         product.setBrands(selectedBrands);
         product.setStatus(statusRepository.getStatusById(Long.valueOf(1)));
         productRepository.save(product);
@@ -95,7 +94,6 @@ public class ProductController {
            product.setBrands(selectedBrands);
         product.setId(productId);
         productRepository.save(product);
-        System.out.println(product.display());
         return "redirect:/products";
     }
 

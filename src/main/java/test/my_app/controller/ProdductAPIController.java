@@ -1,12 +1,15 @@
 package test.my_app.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import test.my_app.domain.*;
+import test.my_app.repos.BrandRepository;
 import test.my_app.repos.ProductRepository;
 import test.my_app.repos.RegisterRepository;
 import test.my_app.services.BrandService;
@@ -26,6 +29,8 @@ public class ProdductAPIController {
 
     @Autowired
     BrandService brandService;
+    @Autowired
+    BrandRepository brandRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -46,14 +51,17 @@ public class ProdductAPIController {
         return ResponseEntity.ok(products);
     }
 
+    @Transactional
     @GetMapping("/subcategories/{id}")
     public ResponseEntity<List<Product>> getAllProductsByCate(@PathVariable Long id) {
         List<Product> products = productService.findByProductCate(id);
         return ResponseEntity.ok(products);
     }
+    @Transactional
     @GetMapping("/brands/{id}")
     public ResponseEntity<List<Product>> getAllProductsByBrandId(@PathVariable Long id) {
-        List<Product> products = productRepository.findByBrandId(id);
+        Brand brand = brandRepository.findById(id).get();
+        List<Product> products = productRepository.findAllByBrands(brand);
         return ResponseEntity.ok(products);
     }
     @GetMapping("/brands")
